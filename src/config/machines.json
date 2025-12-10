@@ -1,0 +1,55 @@
+{
+  "machines": [
+    {
+      "id": "M1",
+      "name": "Distributeur",
+      "type": "DISTRIBUTION",
+      "site": "A",
+      "cycleTime": 2,
+      "capacity": 10,
+      "energyConsumption": 50,
+      "reconfigurable": true
+    },
+    {
+      "id": "M2",
+      "name": "Machine d'Usinage",
+      "type": "MACHINING",
+      "site": "A",
+      "cycleTime": 5,
+      "capacity": 8,
+      "energyConsumption": 100,
+      "reconfigurable": true
+    },
+    {
+      "id": "M3",
+      "name": "Assembleur",
+      "type": "ASSEMBLY",
+      "site": "B",
+      "cycleTime": 3,
+      "capacity": 12,
+      "energyConsumption": 80,
+      "reconfigurable": true
+    },
+    {
+      "id": "M4",
+      "name": "Contrôle Qualité",
+      "type": "QUALITY_CONTROL",
+      "site": "B",
+      "cycleTime": 2,
+      "capacity": 15,
+      "energyConsumption": 60,
+      "reconfigurable": true
+    },
+    {
+      "id": "T1",
+      "name": "Convoyeur",
+      "type": "TRANSPORT",
+      "site": "TRANSPORT",
+      "delayMin": 3,
+      "delayMax": 5,
+      "capacity": 20,
+      "energyConsumption": 30,
+      "reconfigurable": true
+    }
+  ]
+}

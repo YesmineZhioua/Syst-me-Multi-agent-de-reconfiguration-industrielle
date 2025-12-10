@@ -1,0 +1,18 @@
+{
+  "scenarios": [
+    {
+      "id": "FAILURE_M2",
+      "name": "Panne Machine M2",
+      "type": "FAILURE",
+      "strategies": [
+        {
+          "id": "BYPASS_M2",
+          "name": "Contourner M2",
+          "actions": ["SKIP:M2", "REDIRECT:M1->T1"],
+          "time": 120,
+          "energy": 180
+        }
+      ]
+    }
+  ]
+}
