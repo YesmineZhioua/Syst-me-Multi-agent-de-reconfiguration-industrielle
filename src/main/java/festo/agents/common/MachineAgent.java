@@ -1,4 +1,4 @@
-package festo.agents;
+package festo.agents.common;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -14,7 +14,6 @@ public class MachineAgent extends Agent {
     private boolean operational;
 
     protected void setup() {
-        // Récupérer les arguments
         Object[] args = getArguments();
         if (args != null && args.length >= 3) {
             machineId = (String) args[0];
@@ -24,10 +23,15 @@ public class MachineAgent extends Agent {
 
         operational = true;
 
-        Logger.log("Machine Agent démarré: " + machineId +
-                " (" + machineType + " - Site " + site + ")");
+        String agentName = getAID().getLocalName();
+        if (agentName.contains("Central")) {
+            Logger.log("Machine Agent Central démarré: " + machineId);
+        } else if (agentName.contains("Composite")) {
+            Logger.log("Machine Agent Composite démarré: " + machineId);
+        } else {
+            Logger.log("Machine Agent démarré: " + machineId);
+        }
 
-        // Ajouter un comportement pour recevoir les commandes
         addBehaviour(new CyclicBehaviour(this) {
             public void action() {
                 ACLMessage msg = receive();
@@ -39,17 +43,12 @@ public class MachineAgent extends Agent {
             }
         });
 
-        // Simuler le fonctionnement
-        simulateOperation();
-    }
-
-    private void simulateOperation() {
         addBehaviour(new TickerBehaviour(this, 3000) {
             protected void onTick() {
                 if (operational) {
                     double random = Math.random();
 
-                    if (random < 0.05) { // 5% de chance de panne
+                    if (random < 0.05) {
                         operational = false;
                         Logger.log("Machine " + machineId + " en panne!");
                     } else {
@@ -66,39 +65,36 @@ public class MachineAgent extends Agent {
 
         Logger.log("Commande reçue de " + sender + ": " + content);
 
-        if (content.contains("RECONFIGURE")) {
-            executeReconfiguration(content);
-        } else if (content.contains("STOP")) {
-            stopMachine();
-        } else if (content.contains("START")) {
-            startMachine();
+        if (content.contains("BYPASS")) {
+            executeBypass(content);
+        } else if (content.contains("OPTIMIZE")) {
+            executeOptimization(content);
+        } else if (content.contains("COMPOSITE")) {
+            executeCompositeCommand(content);
         }
 
-        // Envoyer confirmation
         ACLMessage reply = msg.createReply();
         reply.setPerformative(ACLMessage.CONFIRM);
         reply.setContent("Commande exécutée: " + content);
         send(reply);
     }
 
-    private void executeReconfiguration(String command) {
-        Logger.log("Exécution reconfiguration: " + command);
+    private void executeBypass(String command) {
+        Logger.log("Exécution bypass: " + command);
+    }
 
-        if (command.contains("BYPASS")) {
-            Logger.log("Mode bypass activé pour " + machineId);
-        } else if (command.contains("CHANGE_PARAMS")) {
-            Logger.log("Paramètres modifiés pour " + machineId);
+    private void executeOptimization(String command) {
+        Logger.log("Exécution optimisation: " + command);
+    }
+
+    private void executeCompositeCommand(String command) {
+        Logger.log("Exécution commande composite: " + command);
+
+        if (command.contains("RUN_DIAGNOSTIC")) {
+            Logger.log("Diagnostic en cours pour " + machineId);
+        } else if (command.contains("ACTIVATE_COMPOSITE_BYPASS")) {
+            Logger.log("Bypass composite activé pour " + machineId);
         }
-    }
-
-    private void stopMachine() {
-        operational = false;
-        Logger.log("Machine " + machineId + " arrêtée");
-    }
-
-    private void startMachine() {
-        operational = true;
-        Logger.log("Machine " + machineId + " démarrée");
     }
 
     protected void takeDown() {

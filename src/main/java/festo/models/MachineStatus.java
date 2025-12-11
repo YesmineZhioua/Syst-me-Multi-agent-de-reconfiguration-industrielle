@@ -1,6 +1,8 @@
 package festo.models;
 
-public class MachineStatus {
+import java.io.Serializable;
+
+public class MachineStatus implements Serializable {
     private String machineId;
     private String state;
     private double load;
@@ -14,7 +16,6 @@ public class MachineStatus {
         this.hasError = false;
     }
 
-    // Getters et Setters
     public String getMachineId() { return machineId; }
     public void setMachineId(String machineId) { this.machineId = machineId; }
 
